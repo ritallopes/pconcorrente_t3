@@ -1,5 +1,8 @@
+package lock;
+
 import java.util.LinkedHashSet;
-import java.util.concurrent.locks.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class BathRoom {
 	private static final int MAXPERSON = 5;
@@ -23,7 +26,7 @@ public class BathRoom {
 	}
 	
 	/**
-	 * Instancias da classe BathRoom
+	 * Instancias da classe monitor.BathRoom
 	 *
 	 * @return Uma instância da classe
 	 */

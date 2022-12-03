@@ -1,7 +1,7 @@
+package lock;
+
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Implementação de uma solução com programação concorrente para o problema do banheiro unissex
@@ -36,8 +36,8 @@ public class Person implements Runnable {
 	 * Constructor.
 	 *
 	 * @param bathRoom     Bathroom available to use
-	 * @param name         Person name
-	 * @param genderPerson Person gender
+	 * @param name         monitor.Person name
+	 * @param genderPerson monitor.Person gender
 	 */
 	public Person(BathRoom bathRoom, String name, GenderPerson genderPerson) {
 		this.bathRoom = bathRoom;
@@ -94,8 +94,7 @@ public class Person implements Runnable {
 				this.wannaGoOut = true;
 				System.out.println(getName() + " usou o banheiro");
 			} catch (InterruptedException ex) {
-				Logger.getLogger(Person.class.getName())
-						.log(Level.SEVERE, null, ex);
+				ex.printStackTrace();
 			}
 			
 		}
@@ -123,15 +122,14 @@ public class Person implements Runnable {
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException ex) {
-				Logger.getLogger(Person.class.getName()).log(Level.SEVERE, null, ex);
+				ex.printStackTrace();
 			}
-			boolean thisGenderEnter = this.bathRoom.getGenderInBathRoom().equals(GenderPerson.EMPTY) || this.getGenderPerson().equals(this.bathRoom.getGenderInBathRoom());
+			boolean thisGenderEnter = this.bathRoom.getGenderInBathRoom().equals(this.getGenderPerson())
+					|| this.bathRoom.getGenderInBathRoom().equals(GenderPerson.EMPTY);
 			boolean BRIsFull = this.bathRoom.isFull();
 			boolean thisPersonInBR = this.bathRoom.personIsBathRoom(this);
-			if ((this.bathRoom.getGenderInBathRoom().equals(this.getGenderPerson())
-					|| this.bathRoom.getGenderInBathRoom().equals(GenderPerson.EMPTY))
-					&& !this.bathRoom.isFull()
-					&& !this.bathRoom.personIsBathRoom(this)) {
+			if (thisGenderEnter && !BRIsFull
+					&& !thisPersonInBR) {
 				this.enterBathRoom();
 			}
 			if(this.getWannaGoOut()){

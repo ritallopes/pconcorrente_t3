@@ -1,3 +1,5 @@
+package lock;
+
 /**
  * Implementação de uma enumeração para representação dos genderos feminino e masculino
  *
