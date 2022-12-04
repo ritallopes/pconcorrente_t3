@@ -90,7 +90,8 @@ public class Person implements Runnable {
 		this.bathRoom.add(this);
 		if (this.bathRoom.personIsBathRoom(this)) {
 			try {
-				TimeUnit.SECONDS.sleep((new Random()).nextInt(1) + 1);
+				int interval = (new Random()).nextInt((10000 - 500) + 1) + 500;
+				Thread.currentThread().sleep(interval);
 				this.wannaGoOut = true;
 				System.out.println(getName() + " usou o banheiro");
 			} catch (InterruptedException ex) {
@@ -119,11 +120,6 @@ public class Person implements Runnable {
 		System.out.println("Pessoa: " + this.getName());
 		
 		while (this.getNeedUseBathRoom()) {
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException ex) {
-				ex.printStackTrace();
-			}
 			boolean thisGenderEnter = this.bathRoom.getGenderInBathRoom().equals(this.getGenderPerson())
 					|| this.bathRoom.getGenderInBathRoom().equals(GenderPerson.EMPTY);
 			boolean BRIsFull = this.bathRoom.isFull();
@@ -131,6 +127,11 @@ public class Person implements Runnable {
 			if (thisGenderEnter && !BRIsFull
 					&& !thisPersonInBR) {
 				this.enterBathRoom();
+				try {
+					Thread.sleep(5000);//tempo entre as tentativas
+				} catch (InterruptedException e) {
+					throw new RuntimeException(e);
+				}
 			}
 			if(this.getWannaGoOut()){
 				this.wannaGoOutOfBathRoom();

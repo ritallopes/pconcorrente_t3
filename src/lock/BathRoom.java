@@ -1,17 +1,17 @@
 package lock;
 
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class BathRoom {
 	private static final int MAXPERSON = 5;
 	
-	private static BathRoom instance = new BathRoom(MAXPERSON);
+	private static BathRoom bRInstance = new BathRoom(MAXPERSON);
 	private final int capacity;
 	private GenderPerson genderInBathRoom;
-	private final LinkedHashSet<Person> persons;
-	private Lock lock = new ReentrantLock();
+	private final ArrayList<Person> persons;
+	private Lock lock = new ReentrantLock(true);
 	
 	
 	/**
@@ -22,7 +22,7 @@ public class BathRoom {
 	public BathRoom(int maxperson) {
 		this.capacity = maxperson;
 		this.genderInBathRoom = GenderPerson.EMPTY;
-		this.persons = new LinkedHashSet<>();
+		this.persons = new ArrayList<>();
 	}
 	
 	/**
@@ -31,8 +31,9 @@ public class BathRoom {
 	 * @return Uma instância da classe
 	 */
 	public static BathRoom getInstance() {
-		return instance;
+		return bRInstance;
 	}
+	
 	/**
 	 * Mostrar o sexo das pessoas que estão dentro do banheiro
 	 *
@@ -57,6 +58,7 @@ public class BathRoom {
 					!this.persons.contains(person)) {
 				if (this.persons.add(person)) {
 					System.out.println(person.getName() + " entrou no banheiro");
+					System.out.println(this.getPersons().size()+ " pessoas no banheiro.");
 				}
 				if (this.isFull()) {
 					System.out.println("Agora o banheiro encheu");
@@ -65,8 +67,8 @@ public class BathRoom {
 		} finally {
 			this.lock.unlock();
 		}
-		
 	}
+	
 	/**
 	 * Remover uma pessoa dentro do banheiro
 	 *
@@ -74,14 +76,13 @@ public class BathRoom {
 	 */
 	public void getOffPerson(Person person) {
 		this.lock.lock();
-		
 		try {
 			if (!this.isEmpty()) {
-				if(this.persons.remove(person)){
-					System.out.println(person.getName()+" saiu!");
+				if (this.persons.remove(person)) {
+					System.out.println(person.getName() + " saiu!");
 				}
 			}
-			if(this.isEmpty()){
+			if (this.isEmpty()) {
 				System.out.println("O Banheiro está vazio");
 				this.genderInBathRoom = GenderPerson.EMPTY;
 			}
@@ -110,6 +111,7 @@ public class BathRoom {
 	public boolean isFull() {
 		return this.persons.size() == capacity;
 	}
+	
 	/**
 	 * Saber se determinado pessoa está no banheiro
 	 *
@@ -120,6 +122,13 @@ public class BathRoom {
 	public boolean personIsBathRoom(Person person) {
 		return this.persons.contains(person);
 	}
-	
+	/**
+	 * Acessar as pessoas no banheiro
+	 *
+	 * @return a lista ligada de pessoas no banheiro
+	 */
+	public ArrayList getPersons() {
+		return persons;
+	}
 	
 }
